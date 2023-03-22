@@ -40,3 +40,52 @@ console.log(galleryItems);
 
 //** */ Закрытие с клавиатуры
 // Добавь закрытие модального окна по нажатию клавиши Escape. Сделай так, чтобы прослушивание клавиатуры было только пока открыто модальное окно. У библиотеки basicLightbox есть метод для программного закрытия модального окна.
+
+const parent = document.querySelector('.gallery');
+
+const modalWindow = document.createElement('div');
+const instance = basicLightbox.create(modalWindow); 
+
+  // const img = document.createElement('img');
+
+  // img.classList.add('gallery__image')
+  // img.src = item.original;
+  // img.alt = item.description;
+
+  // modalWindow.append(img);
+  // return modalWindow
+
+// https://www.jsdelivr.com/package/npm/basiclightbox  
+// Events	Multiple ways to handle events.  
+// https://codepen.io/electerious/pen/pOBLQQ
+
+const chields = galleryItems.map(item => { 
+  const li = document.createElement('li');
+  const a = document.createElement('a');
+  const img = document.createElement('img');
+
+  li.classList.add('gallery__item');
+  a.classList.add('gallery__link');
+  a.href = item.original;
+  img.classList.add('gallery__image');
+  img.src = item.preview;
+  img.alt = item.description;
+  img.dataset.source = item.original;
+
+  a.addEventListener('click', (event) => {
+    // прибираємо скачування картинки та відкриття нового вікна по замовчуванню
+    event.preventDefault();
+
+    console.log(event.currentTarget);
+    // createModal(item).show;
+    instance.show;
+  })
+
+  a.append(img);
+  li.append(a);
+
+  return li;
+})
+
+parent.append(...chields);
+
