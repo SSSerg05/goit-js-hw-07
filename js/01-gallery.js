@@ -115,7 +115,9 @@ function onClickImage(event) {
     return;
   }
   event.preventDefault();
+
   currentImage = event.target;
+  // console.log(currentImage);
   
   // створюємо контейнер для модального вікна
   const div = document.createElement('div');
@@ -165,24 +167,23 @@ function addNavButton(navstr) {
   Object.assign(btn.style, style)
   btn.textContent = (navstr === 'next') ? '>': '<'
 
-  // подія клік на кнопці
+  // подія - клік на кнопці навігації
   btn.addEventListener('click', (event) => {
     if (event.target.nodeName !== 'BUTTON') { 
       return;
     }
 
-    // console.log(event.target) 
-    // console.log(event.currentTarget) 
     instance.close();
+
+    // img < a < li
+    const li = currentImage.parentNode.parentNode;
+    let node = (navstr === 'next') ?
+      li.nextSibling :
+      li.previousSibling ;
     
-    const node = (navstr === 'next') ?
-      currentImage.nextSibling :
-      currentImage.previousSibling;
-    
-    console.log(node, currentImage)
-    
+    // li > a > img  
     if (node !== null) { 
-      node.click()
+      node.lastChild.lastChild.click()
     }
   })
 
