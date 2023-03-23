@@ -61,8 +61,7 @@ const chields = galleryItems.map(item => {
   const img = document.createElement('img');
 
   li.classList.add('gallery__item');
-  li.dataset.id = count;
-  count++;
+
 
   a.classList.add('gallery__link');
   a.href = item.original;
@@ -71,32 +70,34 @@ const chields = galleryItems.map(item => {
   img.alt = item.description;
   img.loading = 'lazy';
   img.dataset.source = item.original;
+  img.dataset.id = count;
+  count++;
 
-  li.addEventListener('click', (event) => {
-    // прибираємо скачування картинки та відкриття нового вікна по замовчуванню
-    event.preventDefault();
+  // li.addEventListener('click', (event) => {
+  //   // прибираємо скачування картинки та відкриття нового вікна по замовчуванню
+  //   event.preventDefault();
 
-    currentImage = event.currentTarget;
+  //   currentImage = event.currentTarget;
 
-    // створюємо контейнер для модального вікна
-    const div = document.createElement('div');
-    div.style.position = 'relative';
+  //   // створюємо контейнер для модального вікна
+  //   const div = document.createElement('div');
+  //   div.style.position = 'relative';
 
-    const image = document.createElement('img');
-    image.src = item.original;
-    image.style.cursor = 'zoom-out';
-    image.addEventListener('click', () => instance.close())
+  //   const image = document.createElement('img');
+  //   image.src = item.original;
+  //   image.style.cursor = 'zoom-out';
+  //   image.addEventListener('click', () => instance.close())
  
-    const btnNext = addNavButton('next')
-    const btnPrev = addNavButton('prev')
+  //   const btnNext = addNavButton('next')
+  //   const btnPrev = addNavButton('prev')
     
-    div.append( image, btnPrev, btnNext );
+  //   div.append( image, btnPrev, btnNext );
   
-    // передаємо контейнер у обробчик Lightbox 
-    instance = basicLightbox.create(div); 
-    instance.show();
-    console.log(instance);
-  })
+  //   // передаємо контейнер у обробчик Lightbox 
+  //   instance = basicLightbox.create(div); 
+  //   instance.show();
+  //   console.log(instance);
+  // })
 
   a.append(img);
   li.append(a);
@@ -105,6 +106,40 @@ const chields = galleryItems.map(item => {
 })
 
 parent.append(...chields);
+parent.addEventListener('click', onClickImage)
+
+
+// подія onClick на картинці
+function onClickImage(event) { 
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+  event.preventDefault();
+  currentImage = event.target;
+  
+  // створюємо контейнер для модального вікна
+  const div = document.createElement('div');
+  div.style.position = 'relative';
+  const image = document.createElement('img');
+  image.src = currentImage.dataset.source;
+  image.alt = currentImage.alt;
+  image.style.cursor = 'zoom-out';
+  
+  // ловимо подію на картинці модального вікна
+  image.addEventListener('click', () => instance.close())
+
+  // підключаємо кнопки навігації
+  const btnNext = addNavButton('next')
+  const btnPrev = addNavButton('prev')
+  
+  // додаємо всі елементи до контейнеру
+  div.append( image, btnPrev, btnNext );
+
+  // передаємо контейнер у обробчик Lightbox 
+  instance = basicLightbox.create(div); 
+  instance.show();
+}
+
 
 // додаємо кнопки для навігації по галереї
 function addNavButton(navstr) {
@@ -130,14 +165,22 @@ function addNavButton(navstr) {
   Object.assign(btn.style, style)
   btn.textContent = (navstr === 'next') ? '>': '<'
 
-  // дія
-  btn.addEventListener('click', () => {
+  // подія клік на кнопці
+  btn.addEventListener('click', (event) => {
+    if (event.target.nodeName !== 'BUTTON') { 
+      return;
+    }
+
+    // console.log(event.target) 
+    // console.log(event.currentTarget) 
     instance.close();
     
     const node = (navstr === 'next') ?
       currentImage.nextSibling :
       currentImage.previousSibling;
-
+    
+    console.log(node, currentImage)
+    
     if (node !== null) { 
       node.click()
     }
