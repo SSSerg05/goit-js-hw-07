@@ -45,7 +45,7 @@ console.log(galleryItems);
 // Добавь закрытие модального окна по нажатию клавиши Escape. 
 // Сделай так, чтобы прослушивание клавиатуры было только пока открыто модальное окно. 
 // У библиотеки basicLightbox есть метод для программного закрытия модального окна.
-const bigImages = [];
+
 let instance;
 let currentImage;
 let count = 0;
@@ -106,7 +106,7 @@ const chields = galleryItems.map(item => {
 
 parent.append(...chields);
 
-
+// додаємо кнопки для навігації по галереї
 function addNavButton(navstr) {
   const pos = (navstr === 'next') ? 'right': 'left' ;
   const btn = document.createElement('button')
@@ -130,26 +130,18 @@ function addNavButton(navstr) {
   Object.assign(btn.style, style)
   btn.textContent = (navstr === 'next') ? '>': '<'
 
+  // дія
   btn.addEventListener('click', () => {
-    const navigation = (navstr === 'next') ? nextSibling : prevSibling 
-    console.log(navigation)
-    navigation();
+    instance.close();
+    
+    const node = (navstr === 'next') ?
+      currentImage.nextSibling :
+      currentImage.previousSibling;
+
+    if (node !== null) { 
+      node.click()
+    }
   })
 
   return btn;
-}
-
-function nextSibling() {
-  instance.close();
-  console.log('current',currentImage)
-  const nodeNext = currentImage.nextSibling
-  console.log('next',nodeNext) 
-  nodeNext.click();
-}
-function prevSibling() {
-  instance.close();
-  console.log('current',currentImage)
-  const nodePrev = currentImage.previousSibling  
-  console.log('prev',nodePrev)
-  nodePrev.click();
 }
