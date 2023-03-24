@@ -42,28 +42,29 @@ const chields = galleryItems.map(item => {
 parent.append(...chields);
 parent.addEventListener('click', onClickImage)
 
-// ловимо подію у поточному документі
+// ловимо подію натискання кнопок у поточному документі
 document.addEventListener('keydown', (event) => {
   if (!isModalActive) {
     return
   }
 
   event.preventDefault();
-  const obj = {
+  // Об'єкт кнопок та функцій
+  const objKeys = {
     'ArrowRight': onPressNextButton,
     'ArrowLeft': onPressPrevButton,
     'Escape': instanceClose,
   }
 
   // обробчик клавіатури
-  for (const key in obj) {
+  for (const key in objKeys) {
     if (event.key === key) { 
-      obj[key]();
+      objKeys[key]();
     }
   }
 })
 
-function onPressNextButton() { 
+function onPressNextButton() {
   btnNext.click()
 }
 function onPressPrevButton() { 
@@ -95,6 +96,7 @@ function onClickImage(event) {
   image.src = currentImage.dataset.source;
   image.alt = currentImage.alt;
   image.style.cursor = 'zoom-out';
+
   
   // ловимо подію на картинці модального вікна
   image.addEventListener('click', () => instanceClose())
