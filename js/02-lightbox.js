@@ -43,11 +43,11 @@ const cards = galleryItems.map(item => {
           alt="${item.description}" 
           title="${item.description}" />
      </a>
-    </li>`
+    </li>`;
   return sample;
 });
 
-parent.insertAdjacentHTML('afterbegin', cards);
+parent.insertAdjacentHTML('afterbegin', cards.join(''));
 
 let gallery = new SimpleLightbox('.gallery a');
 gallery.on('show.simplelightbox', function () {
